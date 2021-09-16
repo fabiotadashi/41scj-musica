@@ -3,10 +3,12 @@ package br.com.fiap.musica.controller;
 import br.com.fiap.musica.dto.MusicaCreateUpdateDTO;
 import br.com.fiap.musica.dto.MusicaDTO;
 import br.com.fiap.musica.dto.MusicaPrecoDTO;
+import br.com.fiap.musica.dto.MusicaSimpleDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class MusicaController {
         musicaDTO.setAutor("Legião Urbana");
         musicaDTO.setDataLancamento(LocalDate.of(1989, 1, 10));
         musicaDTO.setDuracao(180);
+        musicaDTO.setPreco(BigDecimal.valueOf(5.2));
         musicas.add(musicaDTO);
 
         MusicaDTO musicaDTO1 = new MusicaDTO();
@@ -34,15 +37,17 @@ public class MusicaController {
         musicaDTO1.setAutor("Tim Maia");
         musicaDTO1.setDataLancamento(LocalDate.of(1985, 5, 11));
         musicaDTO1.setDuracao(200);
+        musicaDTO1.setPreco(BigDecimal.valueOf(5.1));
         musicas.add(musicaDTO1);
     }
 
     @GetMapping
-    public List<MusicaDTO> list(
+    public List<MusicaSimpleDTO> list(
             @RequestParam(value = "name", required = false, defaultValue = "") String nome
     ) {
         return musicas.stream()
                 .filter(dto -> dto.getNome().startsWith(nome))
+                .map(dto -> new MusicaSimpleDTO(dto))
                 .collect(Collectors.toList());
     }
 
