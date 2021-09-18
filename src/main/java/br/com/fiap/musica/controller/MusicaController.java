@@ -4,58 +4,34 @@ import br.com.fiap.musica.dto.MusicaCreateUpdateDTO;
 import br.com.fiap.musica.dto.MusicaDTO;
 import br.com.fiap.musica.dto.MusicaPrecoDTO;
 import br.com.fiap.musica.dto.MusicaSimpleDTO;
+import br.com.fiap.musica.service.MusicaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("songs")
 public class MusicaController {
 
-    private List<MusicaDTO> musicas = new ArrayList<>();
+    private final MusicaService musicaService;
 
-    public MusicaController(){
-        // mock
-        MusicaDTO musicaDTO = new MusicaDTO();
-        musicaDTO.setId(1);
-        musicaDTO.setNome("Pais e Filhos");
-        musicaDTO.setAutor("Legião Urbana");
-        musicaDTO.setDataLancamento(LocalDate.of(1989, 1, 10));
-        musicaDTO.setDuracao(180);
-        musicaDTO.setPreco(BigDecimal.valueOf(5.2));
-        musicas.add(musicaDTO);
-
-        MusicaDTO musicaDTO1 = new MusicaDTO();
-        musicaDTO1.setId(2);
-        musicaDTO1.setNome("Você");
-        musicaDTO1.setAutor("Tim Maia");
-        musicaDTO1.setDataLancamento(LocalDate.of(1985, 5, 11));
-        musicaDTO1.setDuracao(200);
-        musicaDTO1.setPreco(BigDecimal.valueOf(5.1));
-        musicas.add(musicaDTO1);
+    public MusicaController(MusicaService musicaService) {
+        this.musicaService = musicaService;
     }
 
     @GetMapping
     public List<MusicaSimpleDTO> list(
             @RequestParam(value = "name", required = false, defaultValue = "") String nome
     ) {
-        return musicas.stream()
-                .filter(dto -> dto.getNome().startsWith(nome))
-                .map(MusicaSimpleDTO::new)
-                .collect(Collectors.toList());
+        return musicaService.list(nome);
     }
 
     @GetMapping("{id}")
     public MusicaDTO findById(
             @PathVariable long id
     ){
-        return getSongById(id);
+        return musicaService.findById(id);
     }
 
     @PostMapping
@@ -63,10 +39,7 @@ public class MusicaController {
     public MusicaDTO create(
             @RequestBody MusicaCreateUpdateDTO musicaCreateUpdateDTO
     ){
-        MusicaDTO musicaDTO = new MusicaDTO(musicaCreateUpdateDTO);
-        musicaDTO.setId(musicas.size() + 1);
-        musicas.add(musicaDTO);
-        return musicaDTO;
+        return musicaService.create(musicaCreateUpdateDTO);
     }
 
     @PutMapping("{id}")
@@ -74,14 +47,7 @@ public class MusicaController {
             @PathVariable long id,
             @RequestBody MusicaCreateUpdateDTO musicaCreateUpdateDTO
     ){
-        MusicaDTO musicaDTO = getSongById(id);
-        musicaDTO.setNome(musicaCreateUpdateDTO.getNome());
-        musicaDTO.setDuracao(musicaCreateUpdateDTO.getDuracao());
-        musicaDTO.setDataLancamento(musicaCreateUpdateDTO.getDataLancamento());
-        musicaDTO.setAutor(musicaCreateUpdateDTO.getAutor());
-        musicaDTO.setPreco(musicaCreateUpdateDTO.getPreco());
-
-        return musicaDTO;
+        return musicaService.update(id, musicaCreateUpdateDTO);
     }
 
     @PatchMapping("{id}")
@@ -89,9 +55,7 @@ public class MusicaController {
             @PathVariable long id,
             @RequestBody MusicaPrecoDTO musicaPrecoDTO
     ){
-        MusicaDTO musicaDTO = getSongById(id);
-        musicaDTO.setPreco(musicaPrecoDTO.getPreco());
-        return musicaDTO;
+        return musicaService.updatePreco(id, musicaPrecoDTO);
     }
 
     @DeleteMapping("{id}")
@@ -99,15 +63,7 @@ public class MusicaController {
     public void delete(
             @PathVariable long id
     ){
-        MusicaDTO musicaDTO = getSongById(id);
-        musicas.remove(musicaDTO);
-    }
-
-    private MusicaDTO getSongById(@PathVariable long id) {
-        return musicas.stream()
-                .filter(dto -> dto.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "song not found"));
+        musicaService.delete(id);
     }
 
 }
