@@ -47,7 +47,7 @@ public class MusicaController {
     ) {
         return musicas.stream()
                 .filter(dto -> dto.getNome().startsWith(nome))
-                .map(dto -> new MusicaSimpleDTO(dto))
+                .map(MusicaSimpleDTO::new)
                 .collect(Collectors.toList());
     }
 
