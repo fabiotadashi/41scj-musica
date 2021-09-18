@@ -1,34 +1,35 @@
-package br.com.fiap.musica.dto;
+package br.com.fiap.musica.entity;
 
-import br.com.fiap.musica.entity.Musica;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import br.com.fiap.musica.dto.MusicaCreateUpdateDTO;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class MusicaDTO {
+@Entity
+@Table(name = "TB_MUSICA")
+public class Musica {
 
-    @JsonProperty("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonProperty("name")
+    @Column
     private String nome;
 
-    @JsonProperty("duration")
+    @Column
     private int duracao;
 
-    @JsonProperty("author")
+    @Column
     private String autor;
 
-    @JsonProperty("releaseDate")
+    @Column
     private LocalDate dataLancamento;
 
-    @JsonProperty("price")
+    @Column
     private BigDecimal preco;
 
-    public MusicaDTO(){}
-
-    public MusicaDTO(MusicaCreateUpdateDTO musicaCreateUpdateDTO) {
+    public Musica(MusicaCreateUpdateDTO musicaCreateUpdateDTO) {
         this.nome = musicaCreateUpdateDTO.getNome();
         this.duracao = musicaCreateUpdateDTO.getDuracao();
         this.autor = musicaCreateUpdateDTO.getAutor();
@@ -36,13 +37,14 @@ public class MusicaDTO {
         this.preco = musicaCreateUpdateDTO.getPreco();
     }
 
-    public MusicaDTO(Musica musica) {
-        this.id = musica.getId();
-        this.nome = musica.getNome();
-        this.duracao = musica.getDuracao();
-        this.autor = musica.getAutor();
-        this.dataLancamento = musica.getDataLancamento();
-        this.preco = musica.getPreco();
+    public Musica() {}
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -75,14 +77,6 @@ public class MusicaDTO {
 
     public void setDataLancamento(LocalDate dataLancamento) {
         this.dataLancamento = dataLancamento;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public BigDecimal getPreco() {

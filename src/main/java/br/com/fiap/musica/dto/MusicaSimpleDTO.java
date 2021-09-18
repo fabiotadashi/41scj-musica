@@ -1,5 +1,6 @@
 package br.com.fiap.musica.dto;
 
+import br.com.fiap.musica.entity.Musica;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
@@ -18,10 +19,10 @@ public class MusicaSimpleDTO {
 
     public MusicaSimpleDTO(){}
 
-    public MusicaSimpleDTO(MusicaDTO musicaDTO) {
-        this.id = musicaDTO.getId();
-        this.nome = musicaDTO.getNome();
-        this.preco = musicaDTO.getPreco();
+    public MusicaSimpleDTO(Musica musica) {
+        this.id = musica.getId();
+        this.nome = musica.getNome();
+        this.preco = musica.getPreco();
     }
 
     public String getNome() {
