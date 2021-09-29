@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/fiapmusicabatch;DB_CLOSE_ON_EXIT=FALSE
+    username: fiap
+    password: fiap
+  batch:
+    jdbc:
+      initialize-schema: always
+
+arquivo:
+  path: /Users/fabiomiyasato/Documents/arquivomusicadelete.txt
