@@ -6,6 +6,8 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+      schema: classpath:/schema-h2.sql
+
 
 arquivo:
   path: /Users/fabiomiyasato/Documents/arquivomusicadelete.txt

@@ -19,12 +19,12 @@ import java.nio.file.Paths;
 
 @SpringBootApplication
 @EnableBatchProcessing
-public class Application {
+public class ApplicationTasklet {
 
-	private Logger logger = LoggerFactory.getLogger(Application.class);
+	private Logger logger = LoggerFactory.getLogger(ApplicationTasklet.class);
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(ApplicationTasklet.class, args);
 	}
 
 	@Bean
